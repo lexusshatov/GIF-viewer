@@ -10,7 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="248dp"
+        android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:theme="@style/Theme.GIFviewer.AppBarOverlay">
 
@@ -30,7 +30,7 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/Theme.GIFviewer.PopupOverlay">
 
-                <SearchView
+                <androidx.appcompat.widget.SearchView
                     android:id="@+id/search_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
