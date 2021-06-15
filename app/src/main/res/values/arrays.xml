@@ -1,0 +1,87 @@
+<resources>
+    <!-- Language Preference -->
+    <string-array name="language_titles">
+        <item>Arabic</item>
+        <item>Bengali</item>
+        <item>Chinese Simplified</item>
+        <item>Chinese Traditional</item>
+        <item>Czech</item>
+        <item>Danish</item>
+        <item>Dutch</item>
+        <item>English</item>
+        <item>Farsi</item>
+        <item>Filipino</item>
+        <item>Finnish</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Hebrew</item>
+        <item>Hindi</item>
+        <item>Hungarian</item>
+        <item>Indonesian</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+        <item>Malay</item>
+        <item>Norwegian</item>
+        <item>Polish</item>
+        <item>Portuguese</item>
+        <item>Romanian</item>
+        <item>Russian</item>
+        <item>Spanish</item>
+        <item>Swedish</item>
+        <item>Thai</item>
+        <item>Turkish</item>
+        <item>Ukrainian</item>
+        <item>Vietnamese</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>ar</item>
+        <item>bn</item>
+        <item>zh-CN</item>
+        <item>zh-TW</item>
+        <item>cs</item>
+        <item>da</item>
+        <item>nl</item>
+        <item>en</item>
+        <item>fa</item>
+        <item>tl</item>
+        <item>fi</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>he</item>
+        <item>hi</item>
+        <item>hu</item>
+        <item>id</item>
+        <item>it</item>
+        <item>ja</item>
+        <item>ko</item>
+        <item>ms</item>
+        <item>no</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>ro</item>
+        <item>ru</item>
+        <item>es</item>
+        <item>sv</item>
+        <item>th</item>
+        <item>tr</item>
+        <item>uk</item>
+        <item>vi</item>
+    </string-array>
+    
+    <!-- Content Rating Preference -->
+    <string-array name="content_rating_titles">
+        <item>G (очень безопасно)</item>
+        <item>PG (безопасно)</item>
+        <item>PG-13 (небезопасно)</item>
+        <item>R (очень небезопасно)</item>
+    </string-array>
+
+    <string-array name="content_rating_values">
+        <item>g</item>
+        <item>pg</item>
+        <item>pg-13</item>
+        <item>r</item>
+    </string-array>
+</resources>
