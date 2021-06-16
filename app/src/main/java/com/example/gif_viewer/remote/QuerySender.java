@@ -2,17 +2,13 @@ package com.example.gif_viewer.remote;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.telecom.Call;
 import android.util.Log;
 
-import androidx.preference.PreferenceDataStore;
+import androidx.preference.PreferenceManager;
 
-import com.example.gif_viewer.GIFScrollingActivity;
 import com.example.gif_viewer.R;
 
 import java.io.IOException;
-import java.util.prefs.Preferences;
 
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -20,13 +16,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class QuerySender {
     public static final String BASE_URL = "https://api.giphy.com/";
-    private Retrofit retrofit;
-    private APIService apiService;
-    private Context context;
+    private final APIService apiService;
+    private final Context context;
+    private Response<RootJSON> response;
 
     public QuerySender(Context context){
         this.context = context;
-        retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -34,22 +30,37 @@ public class QuerySender {
     }
 
     public void send(String query){
-        SharedPreferences sharedPreferences = context.getSharedPreferences("Search settings", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String language = sharedPreferences.getString("language", "en");
         String count = sharedPreferences.getString("count", "25");
         String content_rating = sharedPreferences.getString("content_rating", "g");
-        Response<GIFList> gifListResponse = null;
         try {
-            gifListResponse = apiService.getGIFs(
+            response = apiService.getGIFs(
                     context.getString(R.string.GIPHY_API_KEY),
                     query,
-                    Integer.valueOf(count),
+                    Integer.parseInt(count),
                     0,
                     content_rating,
                     language).execute();
-            Log.d("QUERY", gifListResponse.body().getData());
+            if (response.isSuccessful()){
+                Log.d("QUERY", response.toString());
+                Log.d("QUERY", "Count GIFs: " + response.body().gifs.size());
+            }else {
+                if (response.errorBody() != null) {
+                    Log.d("ERROR", response.errorBody().string());
+                } else {
+                    Log.d("ERROR", "response is null");
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Response<RootJSON> getResponse() {
+        return response;
+    }
+    public void clearResponse(){
+        response = null;
     }
 }
