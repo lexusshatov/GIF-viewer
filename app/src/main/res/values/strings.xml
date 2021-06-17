@@ -12,7 +12,7 @@
     <string name="content_rating_title">Рейтинг контента</string>
     <!-- Default values -->
     <string name="language_default">en</string>
-    <string name="count_default">25</string>
+    <string name="limit_default">25</string>
     <string name="content_rating_default">g</string>
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>

@@ -13,8 +13,8 @@
         android:id="@+id/edit_count"
         android:title="@string/count_title"
         app:icon="@drawable/ic_baseline_dynamic_feed_24"
-        android:defaultValue="@string/count_default"
-        app:key="count"
+        android:defaultValue="@string/limit_default"
+        app:key="limit"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         app:useSimpleSummaryProvider="true"/>

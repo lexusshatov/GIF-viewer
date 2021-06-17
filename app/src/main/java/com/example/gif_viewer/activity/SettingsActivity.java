@@ -1,4 +1,4 @@
-package com.example.gif_viewer;
+package com.example.gif_viewer.activity;
 
 import android.os.Bundle;
 import android.text.InputType;
@@ -12,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.EditTextPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
-public class SearchSettingsActivity extends AppCompatActivity {
+import com.example.gif_viewer.R;
+
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,7 @@ public class SearchSettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
-            EditTextPreference editTextPreference = getPreferenceManager().findPreference("count");
+            EditTextPreference editTextPreference = getPreferenceManager().findPreference("limit");
             editTextPreference.setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
         }
     }

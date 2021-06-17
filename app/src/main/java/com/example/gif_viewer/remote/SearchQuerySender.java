@@ -14,13 +14,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class QuerySender {
+public class SearchQuerySender {
     public static final String BASE_URL = "https://api.giphy.com/";
-    private final APIService apiService;
-    private final Context context;
-    private Response<RootJSON> response;
+    protected final APIService apiService;
+    protected final Context context;
+    protected Response<RootJSON> response;
 
-    public QuerySender(Context context){
+    public SearchQuerySender(Context context){
         this.context = context;
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -31,14 +31,14 @@ public class QuerySender {
 
     public void send(String query){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String language = sharedPreferences.getString("language", "en");
-        String count = sharedPreferences.getString("count", "25");
-        String content_rating = sharedPreferences.getString("content_rating", "g");
+        String language = sharedPreferences.getString("language", context.getString(R.string.language_default));
+        String limit = sharedPreferences.getString("limit", context.getString(R.string.limit_default));
+        String content_rating = sharedPreferences.getString("content_rating", context.getString(R.string.content_rating_default));
         try {
-            response = apiService.getGIFs(
+            response = apiService.searchGIFs(
                     context.getString(R.string.GIPHY_API_KEY),
                     query,
-                    Integer.parseInt(count),
+                    Integer.parseInt(limit),
                     0,
                     content_rating,
                     language).execute();

@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.gif_viewer.FullscreenActivity;
+import com.example.gif_viewer.activity.FullscreenActivity;
 import com.example.gif_viewer.R;
 import com.example.gif_viewer.remote.RootJSON;
 

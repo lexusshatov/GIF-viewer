@@ -1,4 +1,4 @@
-package com.example.gif_viewer;
+package com.example.gif_viewer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,10 +12,12 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.gif_viewer.R;
 import com.example.gif_viewer.adapter.FlexboxAdapter;
 import com.example.gif_viewer.databinding.ActivityScrollingBinding;
-import com.example.gif_viewer.remote.QuerySender;
+import com.example.gif_viewer.remote.SearchQuerySender;
 import com.example.gif_viewer.remote.RootJSON;
+import com.example.gif_viewer.remote.TrendingQuerySender;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -60,7 +62,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Intent intentStartSettings = new Intent(this, SearchSettingsActivity.class);
+                Intent intentStartSettings = new Intent(this, SettingsActivity.class);
                 startActivity(intentStartSettings);
                 return true;
         }
@@ -85,27 +87,35 @@ public class GIFScrollingActivity extends AppCompatActivity {
         flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
         recyclerView.setLayoutManager(flexboxLayoutManager);
 
+        TrendingQuerySender trendingQuerySender = new TrendingQuerySender(this);
+        new Thread(() -> {
+            trendingQuerySender.send(null);
+            responseBody = trendingQuerySender.getResponse().body();
+            FlexboxAdapter adapter = new FlexboxAdapter(
+                    GIFScrollingActivity.this,
+                    responseBody);
+            runOnUiThread(() -> GIFScrollingActivity.this.recyclerView.setAdapter(adapter));
+        }).start();
 
-        QuerySender querySender = new QuerySender(this);
+        SearchQuerySender searchQuerySender = new SearchQuerySender(this);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchView.clearFocus();
-                querySender.clearResponse();
+                searchQuerySender.clearResponse();
                 recyclerView.removeAllViews();
                 responseBody = null;
                 recyclerView.scrollToPosition(View.SCROLLBAR_POSITION_DEFAULT);
-                new Thread(() -> querySender.send(query)).start();
-                while (querySender.getResponse() == null) {
+                new Thread(() -> searchQuerySender.send(query)).start();
+                while (searchQuerySender.getResponse() == null) {
                 }
-
+                //Save response for restore on rotation screen
+                responseBody = searchQuerySender.getResponse().body();
                 FlexboxAdapter adapter = new FlexboxAdapter(
                         GIFScrollingActivity.this,
-                        querySender.getResponse().body());
+                        responseBody);
                 recyclerView.setAdapter(adapter);
-                //Save response for restore on rotation screen
-                responseBody = querySender.getResponse().body();
                 return true;
             }
 

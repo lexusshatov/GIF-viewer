@@ -12,15 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GIFviewer">
         <activity
-            android:name=".FullscreenActivity"
+            android:name=".activity.FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen"
             android:theme="@style/Theme.GIFviewer.Fullscreen"></activity>
         <activity
-            android:name=".SearchSettingsActivity"
+            android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".GIFScrollingActivity"
+            android:name=".activity.GIFScrollingActivity"
             android:label="@string/title_activity_scrolling"
             android:theme="@style/Theme.GIFviewer.NoActionBar">
             <intent-filter>

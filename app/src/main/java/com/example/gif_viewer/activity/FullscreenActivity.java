@@ -1,4 +1,4 @@
-package com.example.gif_viewer;
+package com.example.gif_viewer.activity;
 
 import android.annotation.SuppressLint;
 
