@@ -2,13 +2,9 @@ package com.example.gif_viewer;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,23 +12,16 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.gif_viewer.adapter.FlexboxAdapter;
 import com.example.gif_viewer.databinding.ActivityScrollingBinding;
 import com.example.gif_viewer.remote.QuerySender;
 import com.example.gif_viewer.remote.RootJSON;
-import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexWrap;
-import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.android.flexbox.JustifyContent;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GIFScrollingActivity extends AppCompatActivity {
 
@@ -41,11 +30,30 @@ public class GIFScrollingActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FlexboxLayoutManager flexboxLayoutManager;
     private RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
+    private RootJSON responseBody;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_scrolling, menu);
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(RootJSON.class.getSimpleName(), responseBody);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        responseBody = (RootJSON) savedInstanceState.getSerializable(RootJSON.class.getSimpleName());
+        if (responseBody != null){
+            FlexboxAdapter adapter = new FlexboxAdapter(
+                    GIFScrollingActivity.this,
+                    responseBody);
+            recyclerView.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -86,14 +94,18 @@ public class GIFScrollingActivity extends AppCompatActivity {
                 searchView.clearFocus();
                 querySender.clearResponse();
                 recyclerView.removeAllViews();
+                responseBody = null;
                 recyclerView.scrollToPosition(View.SCROLLBAR_POSITION_DEFAULT);
                 new Thread(() -> querySender.send(query)).start();
                 while (querySender.getResponse() == null) {
                 }
+
                 FlexboxAdapter adapter = new FlexboxAdapter(
                         GIFScrollingActivity.this,
                         querySender.getResponse().body());
                 recyclerView.setAdapter(adapter);
+                //Save response for restore on rotation screen
+                responseBody = querySender.getResponse().body();
                 return true;
             }
 
