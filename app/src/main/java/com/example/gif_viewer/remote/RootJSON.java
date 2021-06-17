@@ -2,15 +2,16 @@ package com.example.gif_viewer.remote;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class RootJSON {
+public class RootJSON implements Serializable {
     @SerializedName("data")
     public List<GIF> gifs;
     public Pagination pagination;
     public Meta meta;
     
-    public class Original{
+    public class Original implements Serializable{
         public String height;
         public String width;
         public String size;
@@ -23,62 +24,42 @@ public class RootJSON {
         public String hash;
     }
 
-    public class Downsized{
+    public class Downsized implements Serializable{
         public String height;
         public String width;
         public String size;
         public String url;
     }
 
-    public class DownsizedLarge{
+    public class DownsizedLarge implements Serializable{
         public String height;
         public String width;
         public String size;
         public String url;
     }
 
-    public class DownsizedMedium{
+    public class DownsizedMedium implements Serializable{
         public String height;
         public String width;
         public String size;
         public String url;
     }
 
-    public class DownsizedSmall{
+    public class DownsizedSmall implements Serializable{
         public String height;
         public String width;
         public String mp4_size;
         public String mp4;
     }
 
-    public class DownsizedStill{
+    public class DownsizedStill implements Serializable{
         public String height;
         public String width;
         public String size;
         public String url;
     }
 
-    public class FixedHeight{
-        public String height;
-        public String width;
-        public String size;
-        public String url;
-        public String mp4_size;
-        public String mp4;
-        public String webp_size;
-        public String webp;
-    }
-
-    public class FixedHeightDownsampled{
-        public String height;
-        public String width;
-        public String size;
-        public String url;
-        public String webp_size;
-        public String webp;
-    }
-
-    public class FixedHeightSmall{
+    public class FixedHeight implements Serializable{
         public String height;
         public String width;
         public String size;
@@ -89,21 +70,16 @@ public class RootJSON {
         public String webp;
     }
 
-    public class FixedHeightSmallStill{
+    public class FixedHeightDownsampled implements Serializable{
         public String height;
         public String width;
         public String size;
         public String url;
+        public String webp_size;
+        public String webp;
     }
 
-    public class FixedHeightStill{
-        public String height;
-        public String width;
-        public String size;
-        public String url;
-    }
-
-    public class FixedWidth{
+    public class FixedHeightSmall implements Serializable{
         public String height;
         public String width;
         public String size;
@@ -114,16 +90,21 @@ public class RootJSON {
         public String webp;
     }
 
-    public class FixedWidthDownsampled{
+    public class FixedHeightSmallStill implements Serializable{
         public String height;
         public String width;
         public String size;
         public String url;
-        public String webp_size;
-        public String webp;
     }
 
-    public class FixedWidthSmall{
+    public class FixedHeightStill implements Serializable{
+        public String height;
+        public String width;
+        public String size;
+        public String url;
+    }
+
+    public class FixedWidth implements Serializable{
         public String height;
         public String width;
         public String size;
@@ -134,75 +115,95 @@ public class RootJSON {
         public String webp;
     }
 
-    public class FixedWidthSmallStill{
+    public class FixedWidthDownsampled implements Serializable{
+        public String height;
+        public String width;
+        public String size;
+        public String url;
+        public String webp_size;
+        public String webp;
+    }
+
+    public class FixedWidthSmall implements Serializable{
+        public String height;
+        public String width;
+        public String size;
+        public String url;
+        public String mp4_size;
+        public String mp4;
+        public String webp_size;
+        public String webp;
+    }
+
+    public class FixedWidthSmallStill implements Serializable{
         public String height;
         public String width;
         public String size;
         public String url;
     }
 
-    public class FixedWidthStill{
+    public class FixedWidthStill implements Serializable{
         public String height;
         public String width;
         public String size;
         public String url;
     }
 
-    public class Looping{
+    public class Looping implements Serializable{
         public String mp4_size;
         public String mp4;
     }
 
-    public class OriginalStill{
+    public class OriginalStill implements Serializable{
         public String height;
         public String width;
         public String size;
         public String url;
     }
 
-    public class OriginalMp4{
-        public String height;
-        public String width;
-        public String mp4_size;
-        public String mp4;
-    }
-
-    public class Preview{
-        public String height;
-        public String width;
-        public String mp4_size;
-        public String mp4;
-    }
-
-    public class PreviewGif{
-        public String height;
-        public String width;
-        public String size;
-        public String url;
-    }
-
-    public class PreviewWebp{
-        public String height;
-        public String width;
-        public String size;
-        public String url;
-    }
-
-    public class _480wStill{
-        public String height;
-        public String width;
-        public String size;
-        public String url;
-    }
-
-    public class Hd{
+    public class OriginalMp4 implements Serializable{
         public String height;
         public String width;
         public String mp4_size;
         public String mp4;
     }
 
-    public class Images{
+    public class Preview implements Serializable{
+        public String height;
+        public String width;
+        public String mp4_size;
+        public String mp4;
+    }
+
+    public class PreviewGif implements Serializable{
+        public String height;
+        public String width;
+        public String size;
+        public String url;
+    }
+
+    public class PreviewWebp implements Serializable{
+        public String height;
+        public String width;
+        public String size;
+        public String url;
+    }
+
+    public class _480wStill implements Serializable{
+        public String height;
+        public String width;
+        public String size;
+        public String url;
+    }
+
+    public class Hd implements Serializable{
+        public String height;
+        public String width;
+        public String mp4_size;
+        public String mp4;
+    }
+
+    public class Images implements Serializable{
         public Original original;
         public Downsized downsized;
         public DownsizedLarge downsized_large;
@@ -230,25 +231,25 @@ public class RootJSON {
         public Hd hd;
     }
 
-    public class Onload{
+    public class Onload implements Serializable{
         public String url;
     }
 
-    public class Onclick{
+    public class Onclick implements Serializable{
         public String url;
     }
 
-    public class Onsent{
+    public class Onsent implements Serializable{
         public String url;
     }
 
-    public class Analytics{
+    public class Analytics implements Serializable{
         public Onload onload;
         public Onclick onclick;
         public Onsent onsent;
     }
 
-    public class User{
+    public class User implements Serializable{
         public String avatar_url;
         public String banner_image;
         public String banner_url;
@@ -261,7 +262,7 @@ public class RootJSON {
         public boolean is_verified;
     }
 
-    public class GIF{
+    public class GIF implements Serializable{
         public String type;
         public String id;
         public String url;
@@ -285,13 +286,13 @@ public class RootJSON {
         public User user;
     }
 
-    public class Pagination{
+    public class Pagination implements Serializable{
         public int total_count;
         public int count;
         public int offset;
     }
 
-    public class Meta{
+    public class Meta implements Serializable{
         public int status;
         public String msg;
         public String response_id;

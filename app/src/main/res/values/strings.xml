@@ -14,4 +14,7 @@
     <string name="language_default">en</string>
     <string name="count_default">25</string>
     <string name="content_rating_default">g</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
