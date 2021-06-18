@@ -13,13 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<androidx.recyclerview.widget.RecyclerView
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.imageview.ShapeableImageView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:id="@+id/recycler_view_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/gif"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:background="@drawable/main_header_selector"/>
+    android:layout_height="100dp"
+    android:scaleType="centerCrop"
+    android:layout_margin="1dp"
+    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerImageSize"
+    app:strokeWidth="1dp"
+    />

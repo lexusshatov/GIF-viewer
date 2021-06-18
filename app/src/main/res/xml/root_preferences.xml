@@ -2,29 +2,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ListPreference
-        app:title="@string/languages_title"
-        app:icon="@drawable/ic_baseline_language_24"
+        app:defaultValue="@string/language_default"
         app:entries="@array/language_titles"
         app:entryValues="@array/language_values"
-        app:defaultValue="@string/language_default"
+        app:icon="@drawable/ic_baseline_language_24"
         app:key="language"
+        app:title="@string/languages_title"
         app:useSimpleSummaryProvider="true" />
     <EditTextPreference
         android:id="@+id/edit_count"
-        android:title="@string/count_title"
-        app:icon="@drawable/ic_baseline_dynamic_feed_24"
         android:defaultValue="@string/limit_default"
-        app:key="limit"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        app:useSimpleSummaryProvider="true"/>
+        android:title="@string/count_title"
+        app:icon="@drawable/ic_baseline_dynamic_feed_24"
+        app:key="limit"
+        app:useSimpleSummaryProvider="true" />
     <ListPreference
-        app:title="@string/content_rating_title"
-        app:icon="@drawable/ic_baseline_star_rate_24"
+        app:defaultValue="@string/content_rating_default"
         app:entries="@array/content_rating_titles"
         app:entryValues="@array/content_rating_values"
-        app:defaultValue="@string/content_rating_default"
+        app:icon="@drawable/ic_baseline_star_rate_24"
         app:key="content_rating"
+        app:title="@string/content_rating_title"
         app:useSimpleSummaryProvider="true" />
 
 

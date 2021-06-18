@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:theme="@style/Theme.GIFviewer"
     tools:context=".activity.GIFScrollingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -28,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/Theme.GIFviewer.PopupOverlay">
+                android:background="@color/orange">
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/search_view"
@@ -40,9 +41,6 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/content_scrolling" />
-
+    <include layout="@layout/content_scrolling" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

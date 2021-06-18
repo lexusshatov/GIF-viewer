@@ -8,4 +8,8 @@
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerImageSize" parent="">
+        <item name="cornerSize">5%</item>
+    </style>
 </resources>
