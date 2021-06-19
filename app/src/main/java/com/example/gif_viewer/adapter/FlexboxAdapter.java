@@ -23,13 +23,20 @@ import java.util.List;
 public class FlexboxAdapter extends RecyclerView.Adapter<FlexboxAdapter.ViewHolder> {
     private List<String> urlsDownsized;
     private Context context;
-    private RootJSON fullResponse;
+    private RootJSON responseBody;
 
-    public FlexboxAdapter(Context context, RootJSON fullResponse) {
+    public FlexboxAdapter(Context context, RootJSON responseBody) {
         this.context = context;
-        this.fullResponse = fullResponse;
+        this.responseBody = responseBody;
         urlsDownsized = new ArrayList<>();
-        for (RootJSON.GIF gif : fullResponse.gifs){
+        for (RootJSON.GIF gif : responseBody.gifs){
+            urlsDownsized.add(gif.images.downsized.url);
+        }
+    }
+
+    public void addViews(RootJSON responseBody){
+        this.responseBody.gifs.addAll(responseBody.gifs);
+        for (RootJSON.GIF gif : responseBody.gifs){
             urlsDownsized.add(gif.images.downsized.url);
         }
     }
@@ -38,18 +45,18 @@ public class FlexboxAdapter extends RecyclerView.Adapter<FlexboxAdapter.ViewHold
         return context;
     }
 
-    public RootJSON getFullResponse() {
-        return fullResponse;
+    public RootJSON getResponseBody() {
+        return responseBody;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private final ImageView gifView;
-        private RootJSON fullResponse;
+        private RootJSON responseBody;
 
-        public ViewHolder(View view, Context context, RootJSON fullResponse){
+        public ViewHolder(View view, Context context, RootJSON responseBody){
             super(view);
             gifView = view.findViewById(R.id.gif);
-            this.fullResponse = fullResponse;
+            this.responseBody = responseBody;
         }
 
         public ImageView getGifView() {
@@ -62,7 +69,7 @@ public class FlexboxAdapter extends RecyclerView.Adapter<FlexboxAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_image_items, parent, false);
-        return new ViewHolder(view, getContext(), getFullResponse());
+        return new ViewHolder(view, getContext(), getResponseBody());
     }
 
     @Override
@@ -73,7 +80,7 @@ public class FlexboxAdapter extends RecyclerView.Adapter<FlexboxAdapter.ViewHold
                 .into(holder.getGifView());
         holder.gifView.setOnClickListener(v -> {
             Intent intent = new Intent(context, FullscreenActivity.class);
-            intent.putExtra(RootJSON.GIF.class.getSimpleName(), fullResponse.gifs.get(position));
+            intent.putExtra(RootJSON.GIF.class.getSimpleName(), responseBody.gifs.get(position));
             context.startActivity(intent);
         });
     }

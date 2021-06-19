@@ -1,16 +1,27 @@
 package com.example.gif_viewer.remote;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class RootJSON implements Serializable {
+public class RootJSON implements Serializable, Cloneable {
     @SerializedName("data")
     public List<GIF> gifs;
     public Pagination pagination;
     public Meta meta;
-    
+
+    @NonNull
+    @NotNull
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
     public class Original implements Serializable{
         public String height;
         public String width;

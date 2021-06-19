@@ -16,5 +16,6 @@ public interface APIService {
     @GET("/v1/gifs/trending")
     Call<RootJSON> trendingGIFs(@Query("api_key") String APIKey,
                                 @Query("limit") int limit,
+                                @Query("offset") int offset,
                                 @Query("rating") String rating);
 }
