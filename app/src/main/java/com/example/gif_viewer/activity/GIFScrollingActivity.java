@@ -1,7 +1,9 @@
 package com.example.gif_viewer.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -58,7 +60,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        //outState.putSerializable(RootJSON.class.getSimpleName(), responseBody);
+        outState.putSerializable(RootJSON.class.getSimpleName(), responseBody);
         outState.putString("searchQuery", searchQuery);
         outState.putInt("position", ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition());
         outState.putInt("offset", offset);
@@ -95,8 +97,12 @@ public class GIFScrollingActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+        trendingQuerySender = new TrendingQuerySender(this, offset);
+        searchQuerySender = new SearchQuerySender(this, offset);
+
         if ((searchQuery == null || searchQuery.isEmpty()) && responseBody == null) {
             new Thread(() -> {
+                while (!isNetworkAvailable(GIFScrollingActivity.this));
                 trendingQuerySender.send(null);
                 try {
                     responseBody = (RootJSON) trendingQuerySender.getResponse().body().clone();
@@ -134,8 +140,6 @@ public class GIFScrollingActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new GridLayoutManager(this, spanCountHorizontal));
         }
 
-        trendingQuerySender = new TrendingQuerySender(this, offset);
-        searchQuerySender = new SearchQuerySender(this, offset);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -143,6 +147,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!recyclerView.canScrollVertically(1)) {
                     new Thread(() -> {
+                        while (!isNetworkAvailable(GIFScrollingActivity.this));
                         RootJSON response;
                         if (searchQuery == null || searchQuery.isEmpty()) {
                             //trending add
@@ -177,12 +182,15 @@ public class GIFScrollingActivity extends AppCompatActivity {
                 searchQuery = query;
                 searchView.clearFocus();
                 searchQuerySender.clearResponse();
+                searchQuerySender.setOffset(0);
                 recyclerView.removeAllViews();
                 responseBody = null;
                 offset = 0;
+
                 recyclerView.scrollToPosition(View.SCROLLBAR_POSITION_DEFAULT);
 
                 new Thread(() -> {
+                    while (!isNetworkAvailable(GIFScrollingActivity.this));
                     searchQuerySender.send(query);
                     //Save response for restore on rotation screen
                     responseBody = searchQuerySender.getResponse().body();
@@ -201,5 +209,14 @@ public class GIFScrollingActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    public static boolean isNetworkAvailable(Context context)
+    {
+        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        return wifi.isConnected() || mobile.isConnected();
     }
 }

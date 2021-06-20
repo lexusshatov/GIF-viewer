@@ -21,6 +21,10 @@ public class SearchQuerySender {
     protected Response<RootJSON> response;
     protected int offset;
 
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
     public SearchQuerySender(Context context, int offset){
         this.context = context;
         Retrofit retrofit = new Retrofit.Builder()
@@ -55,10 +59,12 @@ public class SearchQuerySender {
                 } else {
                     Log.d("ERROR", "response is null");
                 }
+
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public Response<RootJSON> getResponse() {
