@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,16 +24,10 @@ import com.example.gif_viewer.databinding.ActivityScrollingBinding;
 import com.example.gif_viewer.remote.SearchQuerySender;
 import com.example.gif_viewer.remote.RootJSON;
 import com.example.gif_viewer.remote.TrendingQuerySender;
-import com.google.android.flexbox.AlignItems;
-import com.google.android.flexbox.FlexDirection;
-import com.google.android.flexbox.FlexLine;
-import com.google.android.flexbox.FlexWrap;
-import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GIFScrollingActivity extends AppCompatActivity {
@@ -62,7 +55,6 @@ public class GIFScrollingActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putSerializable(RootJSON.class.getSimpleName(), responseBody);
         outState.putString("searchQuery", searchQuery);
-        outState.putInt("position", ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition());
         outState.putInt("offset", offset);
         Parcelable recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable("recyclerViewState", recyclerViewState);
@@ -76,7 +68,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
         if (responseBody != null) {
             adapter = new FlexboxAdapter(
                     GIFScrollingActivity.this,
-                    responseBody);
+                    responseBody.gifs);
             recyclerView.setAdapter(adapter);
         }
         searchQuery = savedInstanceState.getString("searchQuery");
@@ -102,7 +94,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
 
         if ((searchQuery == null || searchQuery.isEmpty()) && responseBody == null) {
             new Thread(() -> {
-                while (!isNetworkAvailable(GIFScrollingActivity.this));
+                while (!isNetworkAvailable(GIFScrollingActivity.this)) ;
                 trendingQuerySender.send(null);
                 try {
                     responseBody = (RootJSON) trendingQuerySender.getResponse().body().clone();
@@ -113,7 +105,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
                 Log.d("ENDPOINT1", "offset trending:" + offset);
                 adapter = new FlexboxAdapter(
                         GIFScrollingActivity.this,
-                        responseBody);
+                        responseBody.gifs);
                 runOnUiThread(() -> GIFScrollingActivity.this.recyclerView.setAdapter(adapter));
             }).start();
         }
@@ -147,7 +139,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!recyclerView.canScrollVertically(1)) {
                     new Thread(() -> {
-                        while (!isNetworkAvailable(GIFScrollingActivity.this));
+                        while (!isNetworkAvailable(GIFScrollingActivity.this)) ;
                         RootJSON response;
                         if (searchQuery == null || searchQuery.isEmpty()) {
                             //trending add
@@ -161,12 +153,9 @@ public class GIFScrollingActivity extends AppCompatActivity {
                         try {
                             List<RootJSON.GIF> gifsList = ((RootJSON) response.clone()).gifs;
                             responseBody.gifs.addAll(gifsList);
-                            adapter.addViews(response);
                             offset += gifsList.size();
                             runOnUiThread(() -> recyclerView.scrollToPosition(recyclerView.getScrollState() - 1));
-                        } catch (CloneNotSupportedException e) {
-                            e.printStackTrace();
-                        } catch (NullPointerException e) {
+                        } catch (CloneNotSupportedException | NullPointerException e) {
                             e.printStackTrace();
                         }
                         Log.d("ENDPOINT2", "offset trending:" + offset);
@@ -190,15 +179,14 @@ public class GIFScrollingActivity extends AppCompatActivity {
                 recyclerView.scrollToPosition(View.SCROLLBAR_POSITION_DEFAULT);
 
                 new Thread(() -> {
-                    while (!isNetworkAvailable(GIFScrollingActivity.this));
+                    while (!isNetworkAvailable(GIFScrollingActivity.this)) ;
                     searchQuerySender.send(query);
-                    //Save response for restore on rotation screen
                     responseBody = searchQuerySender.getResponse().body();
                     offset += searchQuerySender.getResponse().body().gifs.size();
                     Log.d("ENDPOINT3", "offset search:" + offset);
                     adapter = new FlexboxAdapter(
                             GIFScrollingActivity.this,
-                            responseBody);
+                            responseBody.gifs);
                     runOnUiThread(() -> recyclerView.setAdapter(adapter));
                 }).start();
                 return true;
@@ -211,8 +199,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
         });
     }
 
-    public static boolean isNetworkAvailable(Context context)
-    {
+    public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);

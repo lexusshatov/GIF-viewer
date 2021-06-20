@@ -30,15 +30,11 @@ public class TrendingQuerySender extends SearchQuerySender {
                     offset,
                     content_rating)
                     .execute();
-            if (response.isSuccessful()){
+            if (response.isSuccessful()) {
                 Log.d("QUERY", response.toString());
-                Log.d("QUERY", "Count GIFs: " + response.body().gifs.size());
-                offset += response.body().gifs.size();
-            }else {
-                if (response.errorBody() != null) {
-                    Log.d("ERROR", response.errorBody().string());
-                } else {
-                    Log.d("ERROR", "response is null");
+                if (response.body() != null) {
+                    Log.d("QUERY", "Count GIFs: " + response.body().gifs.size());
+                    offset += response.body().gifs.size();
                 }
             }
         } catch (IOException e) {

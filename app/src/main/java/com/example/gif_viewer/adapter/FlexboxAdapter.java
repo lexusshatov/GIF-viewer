@@ -17,46 +17,24 @@ import com.example.gif_viewer.remote.RootJSON;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FlexboxAdapter extends RecyclerView.Adapter<FlexboxAdapter.ViewHolder> {
-    private List<String> urlsDownsized;
-    private Context context;
-    private RootJSON responseBody;
+    private final Context context;
+    private List<RootJSON.GIF> gifs;
 
-    public FlexboxAdapter(Context context, RootJSON responseBody) {
+    public FlexboxAdapter(Context context, List<RootJSON.GIF> responseGifs) {
         this.context = context;
-        this.responseBody = responseBody;
-        urlsDownsized = new ArrayList<>();
-        for (RootJSON.GIF gif : responseBody.gifs){
-            urlsDownsized.add(gif.images.downsized.url);
-        }
+        this.gifs = responseGifs;
     }
 
-    public void addViews(RootJSON responseBody){
-        this.responseBody.gifs.addAll(responseBody.gifs);
-        for (RootJSON.GIF gif : responseBody.gifs){
-            urlsDownsized.add(gif.images.downsized.url);
-        }
-    }
 
-    public Context getContext() {
-        return context;
-    }
-
-    public RootJSON getResponseBody() {
-        return responseBody;
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView gifView;
-        private RootJSON responseBody;
 
-        public ViewHolder(View view, Context context, RootJSON responseBody){
+        public ViewHolder(View view) {
             super(view);
             gifView = view.findViewById(R.id.gif);
-            this.responseBody = responseBody;
         }
 
         public ImageView getGifView() {
@@ -69,24 +47,24 @@ public class FlexboxAdapter extends RecyclerView.Adapter<FlexboxAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_image_items, parent, false);
-        return new ViewHolder(view, getContext(), getResponseBody());
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         Glide
                 .with(context)
-                .load(urlsDownsized.get(position))
+                .load(gifs.get(position).images.downsized.url)
                 .into(holder.getGifView());
         holder.gifView.setOnClickListener(v -> {
             Intent intent = new Intent(context, FullscreenActivity.class);
-            intent.putExtra(RootJSON.GIF.class.getSimpleName(), responseBody.gifs.get(position));
+            intent.putExtra(RootJSON.GIF.class.getSimpleName(), gifs.get(position));
             context.startActivity(intent);
         });
     }
 
     @Override
     public int getItemCount() {
-        return urlsDownsized.size();
+        return gifs.size();
     }
 }

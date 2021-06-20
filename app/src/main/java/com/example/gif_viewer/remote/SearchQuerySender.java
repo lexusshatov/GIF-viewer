@@ -25,7 +25,7 @@ public class SearchQuerySender {
         this.offset = offset;
     }
 
-    public SearchQuerySender(Context context, int offset){
+    public SearchQuerySender(Context context, int offset) {
         this.context = context;
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -35,7 +35,7 @@ public class SearchQuerySender {
         this.offset = offset;
     }
 
-    public void send(String query){
+    public void send(String query) {
         clearResponse();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String language = sharedPreferences.getString("language", context.getString(R.string.language_default));
@@ -49,28 +49,24 @@ public class SearchQuerySender {
                     offset,
                     content_rating,
                     language).execute();
-            if (response.isSuccessful()){
+            if (response.isSuccessful()) {
                 Log.d("QUERY", response.toString());
-                Log.d("QUERY", "Count GIFs: " + response.body().gifs.size());
-                offset += response.body().gifs.size();
-            }else {
-                if (response.errorBody() != null) {
-                    Log.d("ERROR", response.errorBody().string());
-                } else {
-                    Log.d("ERROR", "response is null");
+                if (response.body() != null) {
+                    Log.d("QUERY", "Count GIFs: " + response.body().gifs.size());
+                    offset += response.body().gifs.size();
                 }
-
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
 
     public Response<RootJSON> getResponse() {
         return response;
     }
-    public void clearResponse(){
+
+    public void clearResponse() {
         response = null;
     }
 }
