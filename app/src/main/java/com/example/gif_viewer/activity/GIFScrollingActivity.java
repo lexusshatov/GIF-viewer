@@ -154,7 +154,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
                             List<RootJSON.GIF> gifsList = ((RootJSON) response.clone()).gifs;
                             responseBody.gifs.addAll(gifsList);
                             offset += gifsList.size();
-                            runOnUiThread(() -> recyclerView.scrollToPosition(recyclerView.getScrollState() - 1));
+                            runOnUiThread(() -> adapter.notifyDataSetChanged());
                         } catch (CloneNotSupportedException | NullPointerException e) {
                             e.printStackTrace();
                         }
