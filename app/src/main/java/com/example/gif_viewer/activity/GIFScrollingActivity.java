@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gif_viewer.R;
-import com.example.gif_viewer.adapter.FlexboxAdapter;
+import com.example.gif_viewer.adapter.RecyclerViewAdapter;
 import com.example.gif_viewer.databinding.ActivityScrollingBinding;
 import com.example.gif_viewer.remote.SearchQuerySender;
 import com.example.gif_viewer.remote.RootJSON;
@@ -36,7 +36,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
     private SearchView searchView;
     private RecyclerView recyclerView;
     private RootJSON responseBody;
-    private FlexboxAdapter adapter;
+    private RecyclerViewAdapter adapter;
     private String searchQuery;
     private final int spanCountVertical = 3;
     private final int spanCountHorizontal = 5;
@@ -66,7 +66,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
         recyclerView.getLayoutManager().onRestoreInstanceState(savedInstanceState.getParcelable("recyclerViewState"));
         responseBody = (RootJSON) savedInstanceState.getSerializable(RootJSON.class.getSimpleName());
         if (responseBody != null) {
-            adapter = new FlexboxAdapter(
+            adapter = new RecyclerViewAdapter(
                     GIFScrollingActivity.this,
                     responseBody.gifs);
             recyclerView.setAdapter(adapter);
@@ -103,7 +103,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
                 }
                 offset += trendingQuerySender.getResponse().body().gifs.size();
                 Log.d("ENDPOINT1", "offset trending:" + offset);
-                adapter = new FlexboxAdapter(
+                adapter = new RecyclerViewAdapter(
                         GIFScrollingActivity.this,
                         responseBody.gifs);
                 runOnUiThread(() -> GIFScrollingActivity.this.recyclerView.setAdapter(adapter));
@@ -168,7 +168,6 @@ public class GIFScrollingActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchQuery = query;
                 searchView.clearFocus();
                 searchQuerySender.clearResponse();
                 searchQuerySender.setOffset(0);
@@ -184,7 +183,7 @@ public class GIFScrollingActivity extends AppCompatActivity {
                     responseBody = searchQuerySender.getResponse().body();
                     offset += searchQuerySender.getResponse().body().gifs.size();
                     Log.d("ENDPOINT3", "offset search:" + offset);
-                    adapter = new FlexboxAdapter(
+                    adapter = new RecyclerViewAdapter(
                             GIFScrollingActivity.this,
                             responseBody.gifs);
                     runOnUiThread(() -> recyclerView.setAdapter(adapter));
@@ -194,8 +193,30 @@ public class GIFScrollingActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                searchQuery = newText;
                 return false;
             }
+        });
+
+        searchView.setOnCloseListener(() -> {
+            if (searchQuery == null || searchQuery.isEmpty()) {
+                new Thread(() -> {
+                    while (!isNetworkAvailable(GIFScrollingActivity.this)) ;
+                    trendingQuerySender.send(null);
+                    try {
+                        responseBody = (RootJSON) trendingQuerySender.getResponse().body().clone();
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
+                    offset += trendingQuerySender.getResponse().body().gifs.size();
+                    Log.d("ENDPOINT1", "offset trending:" + offset);
+                    adapter = new RecyclerViewAdapter(
+                            GIFScrollingActivity.this,
+                            responseBody.gifs);
+                    runOnUiThread(() -> GIFScrollingActivity.this.recyclerView.setAdapter(adapter));
+                }).start();
+            }
+            return false;
         });
     }
 

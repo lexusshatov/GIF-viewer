@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,7 +12,6 @@ public class RootJSON implements Serializable, Cloneable {
     public List<GIF> gifs;
 
     @NonNull
-    @NotNull
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();

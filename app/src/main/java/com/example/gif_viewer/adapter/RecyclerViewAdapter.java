@@ -19,11 +19,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class FlexboxAdapter extends RecyclerView.Adapter<FlexboxAdapter.ViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private final Context context;
     private List<RootJSON.GIF> gifs;
 
-    public FlexboxAdapter(Context context, List<RootJSON.GIF> responseGifs) {
+    public RecyclerViewAdapter(Context context, List<RootJSON.GIF> responseGifs) {
         this.context = context;
         this.gifs = responseGifs;
     }
